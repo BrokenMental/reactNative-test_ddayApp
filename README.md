@@ -1,79 +1,54 @@
-This is a new [**React Native**](https://reactnative.dev) project, bootstrapped using [`@react-native-community/cli`](https://github.com/react-native-community/cli).
+# android 실행 시
+> 루트 디렉터리에서
+>> npx react-native run-android
 
-# Getting Started
+# gradle 정리 시
+> android 디렉터리에서
+>> ./gradlew clean
 
->**Note**: Make sure you have completed the [React Native - Environment Setup](https://reactnative.dev/docs/environment-setup) instructions till "Creating a new application" step, before proceeding.
+# node_modules 제거 후 다시 생성할 경우
+> 루트 디렉터리에서
+>> 1. rm -rf node_modules
+>> 2. npm install
 
-## Step 1: Start the Metro Server
+# 현재 진행 버전
+> android/build.gradle
+>> com.android.tools.build:gradle:8.1.1
+>
+>> kotlinVersion = "1.9.22"
 
-First, you will need to start **Metro**, the JavaScript _bundler_ that ships _with_ React Native.
+> package.json
+>> "react-native": "0.74.3"
 
-To start Metro, run the following command from the _root_ of your React Native project:
+> android/gradle/wrapper/gradle-wrapper.properties
+>> distributionUrl=https\://services.gradle.org/distributions/gradle-8.3-all.zip
 
-```bash
-# using npm
-npm start
-
-# OR using Yarn
-yarn start
+# react-native는 java 11버전과 찰떡 호환이라고 함
+> 따라서 다른 버전의 java를 사용하고 싶을 경우
+1. android/build.gradle에 아래 코드 추가
+```
+subprojects { 
+   afterEvaluate { project ->
+      if (project.hasProperty("android")) {
+         android {
+            compileOptions {
+               sourceCompatibility JavaVersion.VERSION_17
+               targetCompatibility JavaVersion.VERSION_17
+            }
+         }
+      }
+   }
+}
 ```
 
-## Step 2: Start your Application
-
-Let Metro Bundler run in its _own_ terminal. Open a _new_ terminal from the _root_ of your React Native project. Run the following command to start your _Android_ or _iOS_ app:
-
-### For Android
-
-```bash
-# using npm
-npm run android
-
-# OR using Yarn
-yarn android
+2. android/app/build.gradle의 android 항목 아래 코드 추가
 ```
+compileOptions {
+     sourceCompatibility JavaVersion.VERSION_17
+     targetCompatibility JavaVersion.VERSION_17
+ }
 
-### For iOS
-
-```bash
-# using npm
-npm run ios
-
-# OR using Yarn
-yarn ios
+ kotlinOptions {
+     jvmTarget = '17'
+ }
 ```
-
-If everything is set up _correctly_, you should see your new app running in your _Android Emulator_ or _iOS Simulator_ shortly provided you have set up your emulator/simulator correctly.
-
-This is one way to run your app — you can also run it directly from within Android Studio and Xcode respectively.
-
-## Step 3: Modifying your App
-
-Now that you have successfully run the app, let's modify it.
-
-1. Open `App.tsx` in your text editor of choice and edit some lines.
-2. For **Android**: Press the <kbd>R</kbd> key twice or select **"Reload"** from the **Developer Menu** (<kbd>Ctrl</kbd> + <kbd>M</kbd> (on Window and Linux) or <kbd>Cmd ⌘</kbd> + <kbd>M</kbd> (on macOS)) to see your changes!
-
-   For **iOS**: Hit <kbd>Cmd ⌘</kbd> + <kbd>R</kbd> in your iOS Simulator to reload the app and see your changes!
-
-## Congratulations! :tada:
-
-You've successfully run and modified your React Native App. :partying_face:
-
-### Now what?
-
-- If you want to add this new React Native code to an existing application, check out the [Integration guide](https://reactnative.dev/docs/integration-with-existing-apps).
-- If you're curious to learn more about React Native, check out the [Introduction to React Native](https://reactnative.dev/docs/getting-started).
-
-# Troubleshooting
-
-If you can't get this to work, see the [Troubleshooting](https://reactnative.dev/docs/troubleshooting) page.
-
-# Learn More
-
-To learn more about React Native, take a look at the following resources:
-
-- [React Native Website](https://reactnative.dev) - learn more about React Native.
-- [Getting Started](https://reactnative.dev/docs/environment-setup) - an **overview** of React Native and how setup your environment.
-- [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
-- [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
-- [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
